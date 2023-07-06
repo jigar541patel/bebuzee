@@ -32,7 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   startTime() async {
     String? token = await storage.read(key: keyUserToken);
-    debugPrint("bebuzee customer reading access token have is $token");
     if (token == null) {
       var duration = const Duration(seconds: 5);
       Timer(duration, getNavigationPage);

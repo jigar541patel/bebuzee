@@ -47,28 +47,28 @@ class ApiController extends BaseRepository {
   Future<dynamic> userLogin(var loginFormData,var header) async {
     initConnectivity();
 
-    debugPrint("oonzoo the internet is ${_connectionStatus.name}");
     ApiResponse apiResponse = await apiHitter
         .getPostApiResponse(ApiEndpoint.userLogin, postFormData: loginFormData,isFormData: true,headers: header);
     {
       try {
         if (apiResponse.success) {
-          debugPrint("oonzoo the try first is${apiResponse.response!.data}");
 
-          if (apiResponse.response!.data != null) {
+          if (apiResponse.response!.data['data'] != null) {
             final passEntity = LoginModel.fromJson(apiResponse.response!.data);
             return passEntity;
+
           } else {
-            return apiResponse;
-            // return LoginModel(
-            //     token: apiResponse.response!.data,
-            //     success: apiResponse.success);
+            return ApiResponse(
+              false,
+              status: 0,
+              response: null,
+               message: apiResponse.response!.data['msg']);
+
           }
         } else {
           return apiResponse;
         }
       } catch (error) {
-        debugPrint("oonzoo the error is $apiResponse");
         // return LoginModel(
         //     token: apiResponse.toString(), success: false);
       }
@@ -85,12 +85,11 @@ class ApiController extends BaseRepository {
         token: 'Bearer $userToken',
         postFormData: loginFormData,isFormData: true,);
 
-    debugPrint("jigar the data is getHomeFeedList "+apiResponse.responseCode.toString());
     try {
-      if (apiResponse.responseCode == 302) {
+      if (apiResponse.status == 302) {
         return HomeFeedListModel(
 
-            status: apiResponse.responseCode, msg: apiResponse.message, data: null);
+            status: apiResponse.status, msg: apiResponse.message, data: null);
       }
       if (apiResponse.success) {
         if (apiResponse.response != null) {
@@ -99,35 +98,35 @@ class ApiController extends BaseRepository {
             HomeFeedListModel.fromJson(apiResponse.response!.data);
             return passEntity;
           } else {
-            if (apiResponse.responseCode == 403) {
+            if (apiResponse.status == 403) {
               return HomeFeedListModel(
-                  status: apiResponse.responseCode, msg: apiResponse.message, data: null);
+                  status: apiResponse.status, msg: apiResponse.message, data: null);
             } else {
               return HomeFeedListModel(
-                  status: apiResponse.responseCode, msg: apiResponse.message, data: null);
+                  status: apiResponse.status, msg: apiResponse.message, data: null);
             }
           }
         } else {
-          if (apiResponse.responseCode == 403) {
+          if (apiResponse.status == 403) {
             return HomeFeedListModel(
-                status: apiResponse.responseCode, msg: apiResponse.message, data: null);
+                status: apiResponse.status, msg: apiResponse.message, data: null);
           } else {
             return HomeFeedListModel(
-                status: apiResponse.responseCode, msg: apiResponse.message, data: null);
+                status: apiResponse.status, msg: apiResponse.message, data: null);
           }
         }
       } else {
-        if (apiResponse.responseCode == 403) {
+        if (apiResponse.status == 403) {
           return HomeFeedListModel(
-              status: apiResponse.responseCode, msg: apiResponse.message, data: null);
+              status: apiResponse.status, msg: apiResponse.message, data: null);
         } else {
           return HomeFeedListModel(
-              status: apiResponse.responseCode, msg: apiResponse.message, data: null);
+              status: apiResponse.status, msg: apiResponse.message, data: null);
         }
       }
     } catch (error) {
       return HomeFeedListModel(
-          status: apiResponse.responseCode, msg: apiResponse.message, data: null);
+          status: apiResponse.status, msg: apiResponse.message, data: null);
     }
   }
 

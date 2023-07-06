@@ -31,18 +31,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Future.delayed(const Duration(seconds: 2), () {
-      // cartListBloc.add(GetCartListEvent());
-      // });
-      // String? stringFuture = await storage.read(key: keyUserData!);
 
       await storage.read(key: keyUserData).then((value) {
-        debugPrint("jigar the loginmodel value to string " + value.toString());
         setState(() {
           loginModel = LoginModel.fromJson(json.decode(value!));
         });
-        debugPrint(
-            "jigar the loginmodel name ins " + loginModel!.status.toString());
+
       });
     });
   }

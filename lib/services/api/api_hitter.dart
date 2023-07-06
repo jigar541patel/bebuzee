@@ -38,35 +38,27 @@ class ApiHitter {
           Response response = await getDio().get(endPoint,
               options: Options(headers: headers), queryParameters: queryParams);
           if (response.statusCode == 200) {
-            // debugPrint("vcarez response status code is " +
-            //     response.statusCode.toString());
-            // debugPrint("vcarez response response.data message is " +
-            //     response.data["message"]);
-            // debugPrint("vcarez response response.data status is " +
-            //     response.data["status"]);
-            // debugPrint("vcarez response response.data response is " +
-            //     response.data["response"]);
 
             if (response.statusCode == 200 && response.statusMessage != null) {
               return ApiResponse(true,
-                  responseCode: response.statusCode,
+                  status: response.statusCode,
                   response: response,
                   message: response.statusMessage!);
             } else if (response.data["status"] == 200 &&
                 response.data["message"] == null) {
               return ApiResponse(true,
-                  responseCode: response.data["status"],
+                  status: response.data["status"],
                   response: response,
                   message: '');
             } else {
               return ApiResponse(true,
-                  responseCode: response.data["status"],
+                  status: response.data["status"],
                   response: response,
                   message: response.data["message"]);
             }
           } else {
             return ApiResponse(false,
-                responseCode: response.statusCode!,
+                status: response.statusCode!,
                 response: response,
                 message: response.data["message"]);
           }
@@ -74,10 +66,10 @@ class ApiHitter {
           print('Api Hitter error:  ${error.toString()}');
 
           return ApiResponse(false,
-              responseCode: error.hashCode, message: error.hashCode.toString());
+              status: error.hashCode, message: error.hashCode.toString());
         }
       } else {
-        return ApiResponse(false, responseCode: 301, message: errorNoInternet);
+        return ApiResponse(false, status: 301, message: errorNoInternet);
       }
     } on Exception {
       return CommonUtils.utils.onInternetError();
@@ -136,13 +128,11 @@ class ApiHitter {
                         //postData.length, // Set the content-length.
                       },
               ),
-              // data: {'email': 'jigartest@gmail.com', 'password': '12345'},
               onSendProgress: (int sent, int total) {});
-          debugPrint("jigar the response ==> is $response");
           if (response.statusCode == 200) {
             return ApiResponse(
               true,
-              responseCode: response.data["success"],
+              status: response.data["success"],
               response: response,
               // message: response.data["message"]
             );
@@ -150,13 +140,13 @@ class ApiHitter {
           if (response.statusCode == 302) {
             return ApiResponse(
               true,
-              responseCode: response.data["success"],
+              status: response.data["success"],
               response: response,
               // message: response.data["message"]
             );
           } else if (response.statusCode == 401) {
             return ApiResponse(true,
-                responseCode: response.data["success"],
+                status: response.data["success"],
                 // response: response,
                 message: response.data["message"] ?? "");
           } else if (response.statusCode == 400) {
@@ -168,25 +158,23 @@ class ApiHitter {
             );
           } else {
             return ApiResponse(false,
-                responseCode: response.statusCode!,
+                status: response.statusCode!,
                 response: response,
                 message: response.data["message"]);
           }
         } else {
           return ApiResponse(false,
-              responseCode: 301, message: errorNoInternet);
+              status: 301, message: errorNoInternet);
         }
       } catch (error) {
-        debugPrint("vcarez the error.toString() ==> is " + error.toString());
         try {
           response = error;
           return ApiResponse(false,
-              responseCode: response.response!.statusCode!,
+              status: response.response!.statusCode!,
               message: response.response.data['message']);
         } catch (e) {
-          debugPrint("vcarez the somehting went wrong ==> is " + e.toString());
           return ApiResponse(false,
-              responseCode: 400,
+              status: 400,
               // message: response.response
               message: 'Something went wrong.Try again later');
         }
@@ -211,22 +199,22 @@ class ApiHitter {
               onSendProgress: (int sent, int total) {});
           if (response.statusCode == 200) {
             return ApiResponse(true,
-                responseCode: response.data["status"],
+                status: response.data["status"],
                 response: response,
                 message: response.data["message"]);
           } else {
             return ApiResponse(false,
-                responseCode: response.statusCode!,
+                status: response.statusCode!,
                 response: response,
                 message: response.data["message"]);
           }
         } else {
           return ApiResponse(false,
-              responseCode: 301, message: errorNoInternet);
+              status: 301, message: errorNoInternet);
         }
       } catch (error) {
         return ApiResponse(false,
-            responseCode: error.hashCode, message: error.hashCode.toString());
+            status: error.hashCode, message: error.hashCode.toString());
       }
     } on Exception {
       return CommonUtils.utils.onInternetError();
@@ -252,28 +240,28 @@ class ApiHitter {
               onSendProgress: (int sent, int total) {});
           if (response.statusCode == 200) {
             return ApiResponse(true,
-                responseCode: response.data["status"],
+                status: response.data["status"],
                 response: response,
                 message: response.data["message"]);
           } else {
             return ApiResponse(false,
-                responseCode: response.statusCode!,
+                status: response.statusCode!,
                 response: response,
                 message: response.data["message"]);
           }
         } else {
           return ApiResponse(false,
-              responseCode: 301, message: errorNoInternet);
+              status: 301, message: errorNoInternet);
         }
       } catch (error) {
         try {
           response = error;
           return ApiResponse(false,
-              responseCode: response.response!.statusCode!,
+              status: response.response!.statusCode!,
               message: response.response.data['body']);
         } catch (e) {
           return ApiResponse(false,
-              responseCode: 400, message: 'Something went wrong..');
+              status: 400, message: 'Something went wrong..');
         }
       }
       // catch (error) {
@@ -302,28 +290,28 @@ class ApiHitter {
               onSendProgress: (int sent, int total) {});
           if (response.statusCode == 200) {
             return ApiResponse(true,
-                responseCode: response.data["status"],
+                status: response.data["status"],
                 response: response,
                 message: response.data["message"]);
           } else {
             return ApiResponse(false,
-                responseCode: response.statusCode!,
+                status: response.statusCode!,
                 response: response,
                 message: response.data["message"]);
           }
         } else {
           return ApiResponse(false,
-              responseCode: 301, message: errorNoInternet);
+              status: 301, message: errorNoInternet);
         }
       } catch (error) {
         try {
           response = error;
           return ApiResponse(false,
-              responseCode: response.response!.statusCode!,
+              status: response.response!.statusCode!,
               message: response.response.data['body']);
         } catch (e) {
           return ApiResponse(false,
-              responseCode: 400, message: 'Something went wrong..');
+              status: 400, message: 'Something went wrong..');
         }
       }
     } on Exception {
@@ -351,22 +339,22 @@ class ApiHitter {
               onSendProgress: (int sent, int total) {});
           if (response.statusCode == 200) {
             return ApiResponse(true,
-                responseCode: response.data["status"],
+                status: response.data["status"],
                 response: response,
                 message: response.data["message"]);
           } else {
             return ApiResponse(false,
-                responseCode: response.statusCode!,
+                status: response.statusCode!,
                 response: response,
                 message: response.data["message"]);
           }
         } else {
           return ApiResponse(false,
-              responseCode: 301, message: errorNoInternet);
+              status: 301, message: errorNoInternet);
         }
       } catch (error) {
         return ApiResponse(false,
-            responseCode: error.hashCode, message: error.hashCode.toString());
+            status: error.hashCode, message: error.hashCode.toString());
       }
     } on Exception {
       return CommonUtils.utils.onInternetError();
@@ -388,30 +376,30 @@ class ApiHitter {
               data: isFormData ? formData : data);
           if (response.statusCode == 200) {
             return ApiResponse(true,
-                responseCode: response.data["status"] != null
+                status: response.data["status"] != null
                     ? response.data["status"]
                     : 200,
                 response: response,
                 message: response.data["message"]);
           } else {
             return ApiResponse(false,
-                responseCode: response.statusCode!,
+                status: response.statusCode!,
                 response: response,
                 message: response.data["message"]);
           }
         } else {
           return ApiResponse(false,
-              responseCode: 301, message: errorNoInternet);
+              status: 301, message: errorNoInternet);
         }
       } catch (error) {
         try {
           response = error;
           return ApiResponse(false,
-              responseCode: response.response!.statusCode!,
+              status: response.response!.statusCode!,
               message: response.response.data['body']);
         } catch (e) {
           return ApiResponse(false,
-              responseCode: 400, message: 'Something went wrong..');
+              status: 400, message: 'Something went wrong..');
         }
       }
     } on Exception {
@@ -434,22 +422,22 @@ class ApiHitter {
               onSendProgress: (int sent, int total) {});
           if (response.statusCode == 200) {
             return ApiResponse(true,
-                responseCode: response.data["status"],
+                status: response.data["status"],
                 response: response,
                 message: response.data["message"]);
           } else {
             return ApiResponse(false,
-                responseCode: response.statusCode!,
+                status: response.statusCode!,
                 response: response,
                 message: response.data["message"]);
           }
         } else {
           return ApiResponse(false,
-              responseCode: 301, message: errorNoInternet);
+              status: 301, message: errorNoInternet);
         }
       } catch (error) {
         return ApiResponse(false,
-            responseCode: error.hashCode, message: error.hashCode.toString());
+            status: error.hashCode, message: error.hashCode.toString());
       }
     } on Exception {
       return CommonUtils.utils.onInternetError();
@@ -465,12 +453,12 @@ class ApiHitter {
 
 class ApiResponse {
   dynamic success;
-  var responseCode;
+  var status;
 
   // final String message;
   final String message;
   final Response? response;
 
   ApiResponse(this.success,
-      {this.message = "Success", this.response, this.responseCode});
+      {this.message = "Success", this.response, this.status});
 }

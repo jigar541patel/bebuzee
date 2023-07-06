@@ -35,30 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void initController() {
     loginBloc = BlocProvider.of<LoginBloc>(context);
-    _userNameController.text = "bebuzeeflutter2@gmail.com";
-    _passwordController.text = "12345678";
-
-    // _userNameController = TextEditingController();
-    // _passwordController = TextEditingController();
   }
-
-  // void disposeController() {
-  //   _userNameController.dispose();
-  //   _passwordController.dispose();
-  // }
 
   @override
   void initState() {
     initController();
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   // TODO: implement dispose
-  //   super.dispose();
-  //   disposeController();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -122,41 +105,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           margin: const EdgeInsets.only(top: 50.0),
                           child: CustomFormField(
-                            // onChanged: (val) {
-                            //   BlocProvider.of<LoginBloc>(context).add(
-                            //       LoginTextChangedEvent(_userNameController.text,
-                            //           _passwordController.text));
-                            // },
                             controller: _userNameController,
-                            // inputFormatters: [
-                            //   FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]"))
-                            // ],
-                            // labelText: email,
-                            labelText: email + " / Mobile Number",
+                            labelText: email,
                             validator: (value) {
-                              String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                              RegExp regExp = new RegExp(patttern);
-
                               if (value == null ||
                                   value.isEmpty ||
                                   value.length == 0) {
                                 return phoneEmailError;
-                              } else if (!regExp.hasMatch(value)) {
-                                if (EmailValidator.validate(value) == false) {
-                                  return phoneEmailError;
-                                }
-                                return null;
+                              } else if (EmailValidator.validate(value) ==
+                                  false) {
+                                return phoneEmailError;
                               }
+
                               return null;
                             },
-
                             icon: usernameIcon,
                             isRequire: true,
                             textInputAction: TextInputAction.next,
                             textInputType: TextInputType.emailAddress,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 25,
                         ),
                         CustomFormField(
@@ -223,7 +192,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (state is AddingDataValidCompletedState) {
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((_) {
-
                                   Navigator.pushReplacementNamed(
                                       context, routeDashboard);
                                 });
@@ -266,11 +234,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                               width: SizeConfig
                                                       .blockSizeHorizontal! *
                                                   5.5,
-                                              child: CircularProgressIndicator(
+                                              child: const CircularProgressIndicator(
                                                 color: whiteColor,
                                               ),
                                             )
-                                          : Text(
+                                          : const Text(
                                               login,
                                               style: TextStyle(
                                                 fontSize: 16,
@@ -314,6 +282,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void onLoginButtonClicked() {
     loginBloc.add(LoginSubmittedEvent(
-        _userNameController.text, _passwordController.text));
+        _userNameController.text.toLowerCase(), _passwordController.text));
   }
 }
